@@ -1,0 +1,31 @@
+# MediLog website (Hostinger / Apache / LiteSpeed)
+Options -MultiViews -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# /faq/ -> /faq
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# Keep the old Wix addresses working: /faq serves faq.html, /post/name serves post/name.html
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
+</IfModule>
+
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType font/woff2 "access plus 1 year"
+ExpiresByType image/webp "access plus 1 month"
+ExpiresByType image/png "access plus 1 month"
+ExpiresByType text/css "access plus 1 week"
+ExpiresByType application/javascript "access plus 1 week"
+</IfModule>
+
+<IfModule mod_headers.c>
+Header set X-Content-Type-Options "nosniff"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
